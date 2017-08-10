@@ -122,7 +122,7 @@ static DefaultGUIModel::variable_t vars[] =
   {
     { "Vm", "Membrane potential (V)", DefaultGUIModel::INPUT, },
     { "Isyn (A)", "Output current (A)", DefaultGUIModel::OUTPUT, },
-    {"Cort. State", "Tooltip description", DefaultGUIModel::STATE, },
+    // {"Cort. State", "Tooltip description", DefaultGUIModel::STATE, },
     // {"Fa (Hz)", "", DefaultGUIModel::STATE, },
     // {"Fe (Hz)", "", DefaultGUIModel::STATE, },
     // {"Fi (Hz)", "", DefaultGUIModel::STATE, },
@@ -135,9 +135,9 @@ InVivoLikeCorticalAct::InVivoLikeCorticalAct(void)
 {
   setWhatsThis("<p><b>InVivoLikeCorticalAct:</b><br>Description.</p>");
   initParameters();
+  customizeGUI();
   DefaultGUIModel::createGUI(vars,
                              num_vars); // this is required to create the GUI
-  customizeGUI();
   update(INIT); // this is optional, you may place initialization code directly
                 // into the constructor
   refresh();    // this is required to update the GUI with parameter and state
@@ -190,7 +190,7 @@ InVivoLikeCorticalAct::update(DefaultGUIModel::update_flags_t flag)
   switch (flag) {
     case INIT:
       period = RT::System::getInstance()->getPeriod() * 1e-9; // s
-      setState("Cort. State", state_value);
+      // setState("Cort. State", state_value);
       // setState("Fa (Hz)", Fa);
       // setState("Fe (Hz)", Fe);
       // setState("Fi (Hz)", Fi);
@@ -219,32 +219,36 @@ InVivoLikeCorticalAct::update(DefaultGUIModel::update_flags_t flag)
 void
 InVivoLikeCorticalAct::customizeGUI(void)
 {
-  // QGridLayout* customlayout = DefaultGUIModel::getLayout();
+  DefaultGUIModel::getLayout()->addWidget(new QLabel(tr("Cortical State:")));
+  typeList = new QComboBox;
+  DefaultGUIModel::getLayout()->addWidget(typeList);
+  typeList->addItem("Deep Anesthesia");
+  typeList->addItem("Sleep-like Rhythm");
+  typeList->addItem("Desynchronized Act.");
+  QObject::connect(typeList,SIGNAL(activated(int)),this,SLOT(Bttn_event()));
 
+  // QGridLayout* customlayout = DefaultGUIModel::getLayout();
   // QGroupBox* button_group = new QGroupBox;
 
-  QPushButton* button = new QPushButton("SWITCH Cortical State");
-  QListWidget* listWidget = new QListWidget(this);
-  
   // QPushButton* bbutton = new QPushButton("Button B");
   // QHBoxLayout* button_layout = new QHBoxLayout;
   
   // button_group->setLayout(button_layout);
   // button_layout->addWidget(abutton);
   // button_layout->addWidget(bbutton);
-  QObject::connect(button, SIGNAL(clicked()), this, SLOT(Bttn_event()));
+  // QObject::connect(button, SIGNAL(clicked()), this, SLOT(Bttn_event()));
 
-  QListWidgetItem *Item1 = new QListWidgetItem("Deep-Anesthesia");
-  listWidget->addItem(Item1);
-  QListWidgetItem *Item2 = new QListWidgetItem("Sleep-like act.");
-  listWidget->addItem(Item2);
-  QListWidgetItem *Item3 = new QListWidgetItem("Awake-like act.");
-  listWidget->addItem(Item3);
+  // QListWidgetItem *Item1 = new QListWidgetItem("Deep-Anesthesia");
+  // listWidget->addItem(Item1);
+  // QListWidgetItem *Item2 = new QListWidgetItem("Sleep-like act.");
+  // listWidget->addItem(Item2);
+  // QListWidgetItem *Item3 = new QListWidgetItem("Awake-like act.");
+  // listWidget->addItem(Item3);
     
   // customlayout->addWidget(button_group, 0, 0);
   // customlayout->addWidget(listWidget);
-  DefaultGUIModel::getLayout()->addWidget(button, 0, 0);
-  DefaultGUIModel::getLayout()->addWidget(listWidget, 0, 1);
+  // DefaultGUIModel::getLayout()->addWidget(button, 0, 0);
+  // DefaultGUIModel::getLayout()->addWidget(listWidget, 0, 1);
   // customlayout->addWidget(button);
   // setLayout(customlayout);
 }

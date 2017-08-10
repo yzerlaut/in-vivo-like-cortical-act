@@ -41,7 +41,7 @@ protected:
 
 private:
   
-  QListWidget* listWidget;
+  QComboBox *typeList;
   
   double RdmNumber();
   void conductance_update(double *, double *, double *);
