@@ -52,7 +52,7 @@ private:
   double Ga, Ge, Gi; /* synaptic conductances */
   
   double Fa, Fe, Fi;
-  double state_value;
+  double state_value, lfp_scaling;
   double period, rate, systime;
   int steps;
   long long count;

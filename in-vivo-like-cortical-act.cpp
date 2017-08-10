@@ -120,8 +120,9 @@ void InVivoLikeCorticalAct::Temporal_Dynamics_of_Freqs() {
   
 static DefaultGUIModel::variable_t vars[] =
   {
-    { "Vm", "Membrane potential (V)", DefaultGUIModel::INPUT, },
+    { "Vm (V)", "Membrane potential (V)", DefaultGUIModel::INPUT, },
     { "Isyn (A)", "Output current (A)", DefaultGUIModel::OUTPUT, },
+    { "LFP (V)", "Local Field Potential (V)", DefaultGUIModel::OUTPUT, },
     {"Fa (Hz)", "", DefaultGUIModel::STATE, },
     {"Fe (Hz)", "", DefaultGUIModel::STATE, },
     {"Fi (Hz)", "", DefaultGUIModel::STATE, },
@@ -151,6 +152,7 @@ InVivoLikeCorticalAct::~InVivoLikeCorticalAct(void)
 void
 InVivoLikeCorticalAct::execute(void)
 {
+  double Ie, Ii; // excitatory and inhibitory currents
   systime = count * period; // time in seconds
   Vm = input(0); // voltage in V
   Temporal_Dynamics_of_Freqs();
@@ -159,9 +161,10 @@ InVivoLikeCorticalAct::execute(void)
       conductance_update(&Ga, &Ge, &Gi) ;
     }
   /* === HERE WE GET BACK TO SI UNITS === */
-  output(0) = (Ga*1e-9)*(Ee*1e-3-Vm)
-    +(Ge*1e-9)*(Ee*1e-3-Vm)
-    +(Gi*1e-9)*(Ei*1e-3-Vm);
+  Ie = (Ga*1e-9)*(Ee*1e-3-Vm)+(Ge*1e-9)*(Ee*1e-3-Vm);
+  Ii = (Gi*1e-9)*(Ei*1e-3-Vm);
+  output(0) = Ie+Ii;
+  output(1) = lfp_scaling*(Ii-Ie+10e-9*(-70e-3-Vm)); // LFP-like signal, reintroducing leak currents
   count++;
 }
 
@@ -181,6 +184,7 @@ InVivoLikeCorticalAct::initParameters(void)
   rate = 20000.0; // 20kHz per default here
   period = RT::System::getInstance()->getPeriod() * 1e-9; // s
   steps = static_cast<int> (ceil(period * rate));  
+  lfp_scaling = 1e5 ;
 }
 
 void
@@ -227,7 +231,7 @@ InVivoLikeCorticalAct::customizeGUI(void)
   stateGroup->addWidget(typeList);
   typeList->addItem("Deep Anesthesia");
   typeList->addItem("Sleep-like Rhythm");
-  typeList->addItem("Desynchronized Act.");
+  typeList->addItem("Awake-like Act.");
   QObject::connect(typeList,SIGNAL(activated(int)),this,SLOT(Bttn_event()));
   stateLayout->setLayout(stateGroup);
   customlayout->addWidget(stateLayout, 0, 0);
@@ -237,6 +241,6 @@ void InVivoLikeCorticalAct::Bttn_event(void)
 {
   if (typeList->currentText()=="Deep Anesthesia") state_value = 0;
   if (typeList->currentText()=="Sleep-like Rhythm") state_value = 1;
-  if (typeList->currentText()=="Desynchronized Act.") state_value = 2;
+  if (typeList->currentText()=="Awake-like Act.") state_value = 2;
 }
 
