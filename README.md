@@ -1,16 +1,22 @@
-###Plugin Template
+### Emulating spontaneous cortical activity in-vivo in ![RTXI](https://github.com/RTXI/rtxi)
 
 **Requirements:** None  
 **Limitations:** None  
 
-![Plugin Template GUI](plugin-template.png)
+![Emulating spontaneous cortical activity in-vivo](in-vivo-like-cortical-act.png)
 
 <!--start-->
-This is the plugin template, also known in previous versions as MyPluginGUI. It is designed to provide a simplified interface with which anyone fork into custom RTXI modules. For instructions and tutorials regarding its use, see [the documentation on our website](http://rtxi.org/docs/tutorials/2015/04/15/understanding-plugin-template/). 
+
+This module aims at reproducing the synaptic bombardment targetting a single cell in cortical networks. The currents are based on Poisson point processes convoluted with exponential waveforms. For the rationale of such models and similar dynamic-clamp implementation (for in-vitro experiments), see e.g. the (non-exhaustive) following publications :
+
+
+The config file producing the snapshot (i.e. combined with my LIF-model implementation) can be found on this ![link](https://github.com/yzerlaut/my_rtxi_configs/blob/master/lif-shotnoise-input.set)
+
+
 <!--end-->
 
-####Paramaters
-1. GUI Label - Example parameter
+####Parameters
 
-####States
-1. A State - An example state
+see GUI 
+
+
