@@ -1,9 +1,9 @@
-PLUGIN_NAME = plugin_template
+PLUGIN_NAME = in_vivo_like_cortical_act
 
-HEADERS = plugin-template.h
+HEADERS = in-vivo-like-cortical-act.h
 
-SOURCES = plugin-template.cpp\
-          moc_plugin-template.cpp\
+SOURCES = in-vivo-like-cortical-act.cpp\
+          moc_in-vivo-like-cortical-act.cpp\
 
 LIBS = 
 

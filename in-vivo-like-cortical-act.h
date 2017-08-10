@@ -23,14 +23,14 @@
 
 #include <default_gui_model.h>
 
-class PluginTemplate : public DefaultGUIModel
+class InVivoLikeCorticalAct : public DefaultGUIModel
 {
 
   Q_OBJECT
 
 public:
-  PluginTemplate(void);
-  virtual ~PluginTemplate(void);
+  InVivoLikeCorticalAct(void);
+  virtual ~InVivoLikeCorticalAct(void);
 
   void execute(void);
   void createGUI(DefaultGUIModel::variable_t*, int);
@@ -40,16 +40,31 @@ protected:
   virtual void update(DefaultGUIModel::update_flags_t);
 
 private:
-  double some_parameter;
-  double some_state;
-  double period;
+  
+  QListWidget* listWidget;
+  
+  double RdmNumber();
+  void conductance_update(double *, double *, double *);
+  void Convert_Fa_to_Shotnoise_Freqs();
+  void Temporal_Dynamics_of_Freqs();
+  
+  double Vm;
+  double Ga, Ge, Gi; /* synaptic conductances */
+  
+  double Fa, Fe, Fi;
+  double state_value;
+  double period, rate, systime;
+  int steps;
+  long long count;
+  double Qa, Qe, Qi;
+  double Te, Ti;
+  double Ee, Ei;
+  int Na, Ne, Ni;
 
   void initParameters();
-
+  
 private slots:
   // these are custom functions that can also be connected to events
   // through the Qt API. they must be implemented in plugin_template.cpp
-
-  void aBttn_event(void);
-  void bBttn_event(void);
+  void Bttn_event(void);
 };
