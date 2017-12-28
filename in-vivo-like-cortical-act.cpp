@@ -225,7 +225,6 @@ InVivoLikeCorticalAct::customizeGUI(void)
   QGridLayout* customlayout = DefaultGUIModel::getLayout();
   QGroupBox* stateLayout = new QGroupBox(tr("Choose the Regime of Cortical Activity"));
   QHBoxLayout* stateGroup = new QHBoxLayout();
-
   stateGroup->addWidget(new QLabel(tr("Cortical State:")));
   typeList = new QComboBox;
   stateGroup->addWidget(typeList);
@@ -233,6 +232,13 @@ InVivoLikeCorticalAct::customizeGUI(void)
   typeList->addItem("Sleep-like Rhythm");
   typeList->addItem("Awake-like Act.");
   QObject::connect(typeList,SIGNAL(activated(int)),this,SLOT(Bttn_event()));
+  SwitchShortcut = new QShortcut(QKeySequence(tr("Ctrl+Space", "")), this);
+  QObject::connect(SwitchShortcut, &QShortcut::activated,
+  		   this, &InVivoLikeCorticalAct::KeyBoardSwitch);
+  PauseShortcut = new QShortcut(QKeySequence(tr("Ctrl+Return", "")),this);
+  QObject::connect(PauseShortcut, &QShortcut::activated,
+  		   this,
+  		   &InVivoLikeCorticalAct::KeyBoardSwitch);
   stateLayout->setLayout(stateGroup);
   customlayout->addWidget(stateLayout, 0, 0);
 }
@@ -244,3 +250,10 @@ void InVivoLikeCorticalAct::Bttn_event(void)
   if (typeList->currentText()=="Awake-like Act.") state_value = 2;
 }
 
+void InVivoLikeCorticalAct::KeyBoardSwitch()
+{
+  qDebug() << "Switching State";
+  if (typeList->currentText()=="Awake-like Act.") { state_value = 0; typeList->setCurrentIndex(0); }
+  else if (typeList->currentText()=="Sleep-like Rhythm") { state_value = 2; typeList->setCurrentIndex(2);}
+  else if (typeList->currentText()=="Deep Anesthesia") { state_value = 1; typeList->setCurrentIndex(1);}
+}

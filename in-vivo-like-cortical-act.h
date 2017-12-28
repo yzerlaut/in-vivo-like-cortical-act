@@ -42,7 +42,9 @@ protected:
 private:
   
   QComboBox *typeList;
-  
+  QShortcut *SwitchShortcut;
+  QShortcut *PauseShortcut;
+
   double RdmNumber();
   void conductance_update(double *, double *, double *);
   void Convert_Fa_to_Shotnoise_Freqs();
@@ -67,4 +69,5 @@ private slots:
   // these are custom functions that can also be connected to events
   // through the Qt API. they must be implemented in plugin_template.cpp
   void Bttn_event(void);
+  void KeyBoardSwitch(void);
 };
